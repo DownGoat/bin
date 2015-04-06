@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+
+import Image
+import sys
+import argparse
+
+def one_row(args):
+    new = Image.new("RGBA", (len(args.tiles) * args.width, args.height))
+    idx = 0
+    for x in xrange(0, len(args.tiles) * args.width, args.width):
+        im = Image.open(args.tiles[idx])
+        new.paste(im, (x, 0))
+        idx += 1
+
+    new.save(args.output)
+
+parser = argparse.ArgumentParser(description='Script for merging images into one sprite sheet.')
+parser.add_argument("width", type=int, 
+    help="Width of a single tile.")
+parser.add_argument("height", type=int, 
+    help="Height of a single tile.")
+parser.add_argument("output", type=str, 
+    help="Filename of output")
+parser.add_argument("-r", "--rows", type=int, default=1, 
+    help="Number of rows, default is 1")
+parser.add_argument("-c", "--columns", type=int, default=0, 
+    help="Number of columns, default is calculated based on the number of given images.")
+parser.add_argument("tiles", type=str, nargs="+",
+    help="The tiles to merge into a sheet.")
+
+args = parser.parse_args()
+
+if args.rows != 1:
+    several_rows(args)
+else:
+    one_row(args)
+
+"""
+#opens an image:
+im = Image.open("1_tree.jpg")
+#creates a new empty image, RGB mode, and size 400 by 400.
+new_im = Image.new('RGB', (400,400))
+
+#Here I resize my opened image, so it is no bigger than 100,100
+im.thumbnail((100,100))
+#Iterate through a 4 by 4 grid with 100 spacing, to place my image
+for i in xrange(0,500,100):
+    for j in xrange(0,500,100):
+        #I change brightness of the images, just to emphasise they are unique copies.
+        im=Image.eval(im,lambda x: x+(i+j)/30)
+        #paste the image at location i,j:
+        new_im.paste(im, (i,j))
+
+new_im.show()
+
+"""

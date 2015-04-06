@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+for filename in "$1*"; do
+    echo $filename
+    mtn -O "$1screens/" -D 6 -c 2 -f /usr/share/fonts/OpenSans/OpenSans-Regular.ttf $1
+done
